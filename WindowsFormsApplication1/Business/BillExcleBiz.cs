@@ -98,6 +98,7 @@ namespace bill.Business
 
         public DataTable searchGoodsType()
         {
+            string sheetName = ExcelDataAccess.getExcelSheetNameById(connectionString, 1);
             string sql = "SELECT * FROM [goodsType$] ";
             DataSet dt = new DataSet();
             dt = ExcelDataAccess.GetReader(sql, connectionString);
@@ -113,7 +114,7 @@ namespace bill.Business
         {
             errorMessage = ""; return true;
         }
-
+        
         public bool updateGoodsType(GoodsType goodsType, out string errorMessage)
         {
             errorMessage = ""; return true;

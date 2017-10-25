@@ -33,7 +33,15 @@ namespace bill.DataAccess.Common
             }
             return connection;
         }
-        //public static string 
+        public static string getExcelSheetNameById(string connectionString,int id)
+        {
+            allowConnectionFlag = true;
+            
+            OleDbConnection conn = getConnection(connectionString);
+            DataTable dt = conn.GetOleDbSchemaTable(OleDbSchemaGuid.Tables, null);
+            string sheetName  = conn.GetOleDbSchemaTable(OleDbSchemaGuid.Tables, null).Rows[id][2].ToString().Trim();
+            return sheetName;
+        }
         /// <summary>  
         /// 执行无参数的SQL语句  
         /// </summary>  

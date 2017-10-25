@@ -105,7 +105,7 @@ namespace bill.Business
         /// 查询商品品类
         /// </summary>
         /// <returns></returns>
-        public DataTable searchGoodsType()
+        public DataTable searchGoodsType() 
         {
             DataTable type_dt = new DataTable();
             string procedureName = "商品类别_查询";

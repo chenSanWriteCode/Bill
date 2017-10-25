@@ -10,7 +10,7 @@ namespace bill.Business
     interface IBillBusiness
     {
         void init();
-        DataTable searchGoodsType();
+        DataTable searchGoodsType(); 
 
         DataTable addGoodsType(GoodsType goodsType, out string errorMessage);
 
