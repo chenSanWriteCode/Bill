@@ -60,7 +60,6 @@
             this.dtp_date_begin = new System.Windows.Forms.DateTimePicker();
             this.tb_goods_price_min = new System.Windows.Forms.TextBox();
             this.panel_condition_search = new System.Windows.Forms.Panel();
-            this.button1 = new System.Windows.Forms.Button();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.btn_search_insert = new System.Windows.Forms.Button();
             this.btn_insert = new System.Windows.Forms.Button();
@@ -100,7 +99,6 @@
             this.tabControl1.SuspendLayout();
             this.contextMenuStrip1.SuspendLayout();
             this.tabPage1.SuspendLayout();
-            this.panel_condition_search.SuspendLayout();
             this.tabPage2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgv_bill_insert)).BeginInit();
             this.tabPage3.SuspendLayout();
@@ -412,25 +410,10 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panel_condition_search.BackColor = System.Drawing.Color.Transparent;
-            this.panel_condition_search.Controls.Add(this.button1);
             this.panel_condition_search.Location = new System.Drawing.Point(3, 3);
             this.panel_condition_search.Name = "panel_condition_search";
             this.panel_condition_search.Size = new System.Drawing.Size(989, 78);
             this.panel_condition_search.TabIndex = 6;
-            // 
-            // button1
-            // 
-            this.button1.FlatAppearance.BorderColor = System.Drawing.Color.WhiteSmoke;
-            this.button1.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.button1.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button1.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.button1.Location = new System.Drawing.Point(724, 39);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(100, 30);
-            this.button1.TabIndex = 7;
-            this.button1.Text = "查询";
-            this.button1.UseVisualStyleBackColor = true;
             // 
             // tabPage2
             // 
@@ -810,7 +793,6 @@
             this.contextMenuStrip1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
-            this.panel_condition_search.ResumeLayout(false);
             this.tabPage2.ResumeLayout(false);
             this.tabPage2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgv_bill_insert)).EndInit();
@@ -888,7 +870,6 @@
         private System.Windows.Forms.DataGridViewComboBoxColumn goods_type_insert_dgv;
         private System.Windows.Forms.DataGridViewTextBoxColumn mall_insert;
         private System.Windows.Forms.DataGridViewTextBoxColumn mark_insert;
-        private System.Windows.Forms.Button button1;
     }
 }
 

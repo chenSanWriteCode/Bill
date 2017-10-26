@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Data.OleDb;
-using System.Data; 
+using System.Data;
+using bill.Common.Const;
 
 namespace bill.DataAccess.Common
 {
@@ -85,7 +86,6 @@ namespace bill.DataAccess.Common
             connection.Close();
             return result;
         }
-
         /// <summary>  
         /// 返回单个值有参数的SQL语句  
         /// </summary>  

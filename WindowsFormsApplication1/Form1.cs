@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using bill.Entity;
 using bill.Business;
 using bill.DataAccess.Common;
+using System.Reflection;
 
 namespace Bill
 {
@@ -29,6 +30,7 @@ namespace Bill
                 billBuzz = new BillBiz();
             }
             initControl();
+            
             
             
             
@@ -151,7 +153,6 @@ namespace Bill
         public void goodsInit(ref Goods goods)
         {
             goods.goodsName = tb_goods_name.Text == "" ? null : tb_goods_name.Text;
-
             goods.goodsMark = tb_goods_mark.Text == "" ? null : tb_goods_mark.Text;
             if (combo_goods_type.SelectedIndex != -1)
             {
@@ -442,11 +443,7 @@ namespace Bill
             DataTable type_dt = billBuzz.searchGoodsType();
             dgv_goodsType.DataSource = type_dt;
         }
-
-
-
         #endregion
-
-
     }
 }
+

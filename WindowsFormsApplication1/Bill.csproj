@@ -77,12 +77,17 @@
     <Compile Include="Business\BillBiz.cs" />
     <Compile Include="Business\BillExcleBiz.cs" />
     <Compile Include="Business\IBillBusiness.cs" />
+    <Compile Include="Common\ExcelTool\ExcelTool.cs" />
     <Compile Include="DataAccess\BillDataAccess.cs" />
     <Compile Include="DataAccess\Common\ApplicationConfig.cs" />
+    <Compile Include="Common\Const\BillConst.cs" />
+    <Compile Include="Common\ReflectEntityProp.cs" />
     <Compile Include="DataAccess\Common\ExcelDataAccess.cs" />
     <Compile Include="DataAccess\Common\SQLCommon.cs" />
+    <Compile Include="Entity\BillForExcel.cs" />
     <Compile Include="Entity\Goods.cs" />
     <Compile Include="Entity\GoodsType.cs" />
+    <Compile Include="Entity\GoodsTypeForExcel.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -104,7 +109,9 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
