@@ -11,24 +11,46 @@ namespace bill.Common.ExcelTool
     public class ExcelTool
     {
         /// <summary>
-        /// 为workbook创建第一行
+        /// 为workbook创建带表头的sheet
         /// </summary>
-        /// <param name="wb">HSSFWorkbook</param>
-        /// <param name="table">strut table</param>
+        /// <param name="wb"></param>
+        /// <param name="tableName">sheet名</param>
+        /// <param name="columns">表头</param>
         /// <param name="style">cellStyle can null</param>
         public static void createExcelColumns(ref HSSFWorkbook wb, string tableName,string[] columns, ICellStyle style)
         {
             if (columns.Length>0)
             {
                 ISheet sheet = wb.CreateSheet(tableName);
-                sheet.CreateRow(0).CreateCell(0, CellType.Numeric).SetCellValue(columns[0]);
-                for (int i = 1; i < columns.Length; i++)
+                sheet.CreateRow(0);
+                for (int i = 0; i < columns.Length; i++)
                 {
-                    sheet.GetRow(0).CreateCell(i, CellType.Numeric).SetCellValue(columns[i]);
+                    sheet.GetRow(0).CreateCell(i, CellType.String).SetCellValue(columns[i]);
                 }
                 if (style != null)
                 {
                     changeCellType(ref sheet, style);
+                }
+            }
+        }
+        /// <summary>
+        /// 在sheet现有内容后，创建一行
+        /// </summary>
+        /// <param name="sheet"></param>
+        /// <param name="rows"></param>
+        public static void createRow(ref HSSFSheet sheet,List<ExcelColumn> rows)
+        {
+            int lastRowNum = sheet.LastRowNum+1;
+            if (lastRowNum>0 && rows.Count>0)
+            {
+                sheet.CreateRow(lastRowNum);
+                for (int i = 0 ; i < rows.Count; i++)
+                {
+                    if (rows[i].ColumnContent!=null && rows[i].ColumnContent !="")
+                    {
+                        sheet.GetRow(lastRowNum).CreateCell(rows[i].ColumnOrder, rows[i].ExcelColumnType).SetCellValue(rows[i].ColumnContent);
+                    }
+                    
                 }
             }
         }

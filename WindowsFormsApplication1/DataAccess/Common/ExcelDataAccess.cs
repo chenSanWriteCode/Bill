@@ -34,6 +34,12 @@ namespace bill.DataAccess.Common
             }
             return connection;
         }
+        /// <summary>
+        /// 获取id对应sheet名
+        /// </summary>
+        /// <param name="connectionString"></param>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public static string getExcelSheetNameById(string connectionString,int id)
         {
             allowConnectionFlag = true;
@@ -43,18 +49,58 @@ namespace bill.DataAccess.Common
             string sheetName  = conn.GetOleDbSchemaTable(OleDbSchemaGuid.Tables, null).Rows[id][2].ToString().Trim();
             return sheetName;
         }
+        /// <summary>
+        /// 获取id对应的sheet表最大id，如果表为空，返回0
+        /// </summary>
+        /// <param name="connectionString"></param>
+        /// <param name="id"></param>
+        /// <param name="errMsg"></param>
+        /// <returns></returns>
+        public static int getExcelSheetMaxId(string connectionString,int id,out string errMsg)
+        {
+            errMsg = "";
+            allowConnectionFlag = true;
+            int maxId=0;
+            try
+            {
+                string sql= "select count(*) from [" + getExcelSheetNameById(connectionString, id) + "]";
+                int count = GetScalar(sql, connectionString);
+                if (count>0)
+                {
+                    sql = "select max(id) from [" + getExcelSheetNameById(connectionString, id) + "]";
+                    maxId = GetScalar(sql, connectionString);
+                }
+            }
+            catch(Exception err)
+            {
+                maxId = -1;
+                errMsg = err.Message;
+            }
+            return maxId;
+        }
         /// <summary>  
         /// 执行无参数的SQL语句  
         /// </summary>  
         /// <param name="sql">SQL语句</param>  
         /// <returns>返回受SQL语句影响的行数</returns>  
-        public static int ExecuteCommand(string sql,string connectionString)
+        public static int ExecuteCommand(string sql,string connectionString,out string errMsg)
         {
+            errMsg = "";
             allowConnectionFlag = true;
-            OleDbCommand cmd = new OleDbCommand(sql, getConnection(connectionString));
-            int result = cmd.ExecuteNonQuery();
-            connection.Close();
-            return result;
+            try
+            {
+                
+                OleDbCommand cmd = new OleDbCommand(sql, getConnection(connectionString));
+                int result = cmd.ExecuteNonQuery();
+                connection.Close();
+                return result;
+            }
+            catch(Exception err)
+            {
+                errMsg = err.Message;
+                return -1;
+            }
+            
         }
 
         /// <summary>  
@@ -63,8 +109,9 @@ namespace bill.DataAccess.Common
         /// <param name="sql">SQL语句</param>  
         /// <param name="values">参数集合</param>  
         /// <returns>返回受SQL语句影响的行数</returns>  
-        public static int ExecuteCommand(string sql,string connectionString, params OleDbParameter[] values)
+        public static int ExecuteCommand(string sql,string connectionString, out string errMsg, params OleDbParameter[] values)
         {
+            errMsg = "";
             allowConnectionFlag = true;
             OleDbCommand cmd = new OleDbCommand(sql, getConnection(connectionString));
             cmd.Parameters.AddRange(values);

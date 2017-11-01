@@ -75,9 +75,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Business\BillBiz.cs" />
+    <Compile Include="Business\BillExcelBizNPOI.cs" />
     <Compile Include="Business\BillExcleBiz.cs" />
     <Compile Include="Business\IBillBusiness.cs" />
+    <Compile Include="Common\ExcelTool\ExcelColumn.cs" />
     <Compile Include="Common\ExcelTool\ExcelTool.cs" />
+    <Compile Include="Common\Log.cs" />
     <Compile Include="DataAccess\BillDataAccess.cs" />
     <Compile Include="DataAccess\Common\ApplicationConfig.cs" />
     <Compile Include="Common\Const\BillConst.cs" />

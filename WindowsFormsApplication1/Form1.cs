@@ -10,6 +10,7 @@ using bill.Entity;
 using bill.Business;
 using bill.DataAccess.Common;
 using System.Reflection;
+using bill.Common;
 
 namespace Bill
 {
@@ -22,14 +23,14 @@ namespace Bill
             // 检查excle是否存在，不存在则创建
             if (ApplicationConfig.isUseSqlServer != "1")
             {
-                billBuzz = new BillExcleBiz();
+                billBuzz = new BillExcelBizNPOI();
                 billBuzz.init();
             }
             else
             {
                 billBuzz = new BillBiz();
             }
-            initControl();
+            //initControl();
             
             
             
@@ -141,10 +142,21 @@ namespace Bill
         /// <param name="dt"></param>
         private void recombineTable(ref DataTable dt)
         {
-            DataRow dr = dt.NewRow();
-            dr["商品名称"] = "汇总";
-            dr["商品价格"] = dt.Compute("sum(商品价格)", "");
-            dt.Rows.Add(dr);
+            if (dt.Rows.Count>0)
+            {
+                if (dt.Rows[0]["序号"]==null)
+                {
+                    for (int i = 0; i < dt.Rows.Count; i++)
+                    {
+                        dt.Rows[i]["序号"] = (i + 1);
+                    }
+                }
+                DataRow dr = dt.NewRow();
+                dr["商品名称"] = "汇总";
+                dr["商品价格"] = dt.Compute("sum(商品价格)", "");
+                dt.Rows.Add(dr);
+            }
+            
         }
         /// <summary>
         /// 将form中的变量赋值到goods类中
@@ -207,10 +219,10 @@ namespace Bill
             goods.goodsName = tb_goods_name_insert.Text;
             if(combo_goods_type_insert.SelectedIndex==-1)
             {
-                MessageBox.Show("品类不能为空");
-                return;
+                //MessageBox.Show("品类不能为空");
+                //return;
             }
-            goods.goodsType = combo_goods_type_insert.SelectedValue.ToString();
+            //goods.goodsType = combo_goods_type_insert.SelectedValue.ToString();
             goods.goodsMark = tb_goods_mark_insert.Text;
             double price;
             //判断价格值是否有效
@@ -358,15 +370,18 @@ namespace Bill
             if (tb_goodsType_code.Text=="")
             {
                 MessageBox.Show("品类代码不能为空");
+                return;
             }
             if(tb_goodsType_name.Text=="")
             {
                 MessageBox.Show("品类名称不能为空");
+                return;
             }
             GoodsType goodsType = new GoodsType();
             string errorMessage;
             goodsType.goodsTypeCode = tb_goodsType_code.Text;
             goodsType.goodsTypeName = tb_goodsType_name.Text;
+
             dgv_goodsType.DataSource = billBuzz.addGoodsType(goodsType, out errorMessage);
             if (errorMessage != "")
             {
@@ -444,6 +459,7 @@ namespace Bill
             dgv_goodsType.DataSource = type_dt;
         }
         #endregion
+
     }
 }
 
