@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
-using bill.Common;
+using bill.Common.Const;
 using bill.Common.ExcelTool;
 using bill.DataAccess.Common;
 using bill.Entity;
@@ -30,11 +30,11 @@ namespace bill.Business
         /// <summary>
         /// 账单反射列
         /// </summary>
-        private ReflectEntityProp<BillForExcel> goodsReflect;
+        //private ReflectEntityProp<BillForExcel> goodsReflect;
         /// <summary>
         /// 商品类型反射列
         /// </summary>
-        ReflectEntityProp<GoodsTypeForExcel> goodsTypeReflect;
+        //ReflectEntityProp<GoodsTypeForExcel> goodsTypeReflect;
         #endregion
 
         #region 实例化
@@ -43,10 +43,11 @@ namespace bill.Business
         /// </summary>
         public void init()
         {
+            //goodsReflect = new ReflectEntityProp<BillForExcel>();
+            //goodsTypeReflect = new ReflectEntityProp<GoodsTypeForExcel>();
             dirExistOrCreate(filePath);
             fileExsitOrCreate(filePath + fileName);
-            goodsReflect = new ReflectEntityProp<BillForExcel>();
-            goodsTypeReflect = new ReflectEntityProp<GoodsTypeForExcel>();
+
         }
         /// <summary>
         /// 判断目录（文件夹）是否存在，不存在则创建
@@ -76,13 +77,13 @@ namespace bill.Business
                 font.FontHeightInPoints = 12;
                 style.SetFont(font);
 
-                if (goodsReflect != null)
+                if (ExcelTool.getSheetDataAt(ExcelTool.getWorkBook(filePath+fileName),TableId.BillForExcel.ToString())==null)
                 {
-                    ExcelTool.createExcelColumns(ref wb, goodsReflect.table.name, goodsReflect.table.columns, style);
+                    ExcelTool.createExcelColumns<BillForExcel>(ref wb, style);
                 }
-                if (goodsTypeReflect != null)
+                if (ExcelTool.getSheetDataAt(ExcelTool.getWorkBook(filePath + fileName), TableId.GoodsTypeForExcel.ToString()) == null)
                 {
-                    ExcelTool.createExcelColumns(ref wb, goodsTypeReflect.table.name, goodsTypeReflect.table.columns, style);
+                    ExcelTool.createExcelColumns<GoodsTypeForExcel>(ref wb, style);
                 }
                 FileStream fs = new FileStream(fileFullPath, FileMode.Create);
                 wb.Write(fs);
@@ -90,20 +91,17 @@ namespace bill.Business
             }
         }
         #endregion
+        /// <summary>
+        /// 增加一行账单
+        /// </summary>
+        /// <param name="goods"></param>
+        /// <param name="errorMessage"></param>
+        /// <returns></returns>
         public DataTable addBills(Goods goods, out string errorMessage)
         {
             errorMessage = "";
-            List<Column> columnList = ReflectEntityProp<Goods>.reflectEntityValue(goods, goodsReflect.table.columns);
-            List<ExcelColumn> excelColumns = new List<ExcelColumn>();
-            
-            for (int i = 0; i < columnList.Count; i++)
-            {
-                ExcelColumn excelColumn = new ExcelColumn();
-                excelColumn.ColumnOrder = i;
-                excelColumn.ColumnContent = columnList[i].content;
-                excelColumn.ColumnType = columnList[i].type;
-            }
-
+            ISheet sheet = ExcelTool.getWorkBook(filePath + fileName).GetSheetAt((int)TableId.GoodsTypeForExcel);
+            ExcelTool.createRow<Goods>(ref sheet, goods);
             return new DataTable();
 
         }
@@ -135,7 +133,8 @@ namespace bill.Business
 
         public DataTable searchGoodsType()
         {
-            return new DataTable();
+            DataTable dt_goodsType = ExcelTool.getSheetDataAt(ExcelTool.getWorkBook(filePath+fileName), (int)TableId.GoodsTypeForExcel);
+            return dt_goodsType;
         }
 
         public bool updateBills(Goods goods, out string errorMessage)

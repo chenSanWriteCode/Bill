@@ -84,7 +84,7 @@
     <Compile Include="DataAccess\BillDataAccess.cs" />
     <Compile Include="DataAccess\Common\ApplicationConfig.cs" />
     <Compile Include="Common\Const\BillConst.cs" />
-    <Compile Include="Common\ReflectEntityProp.cs" />
+    <Compile Include="Common\ExcelTool\ReflectEntityProp.cs" />
     <Compile Include="DataAccess\Common\ExcelDataAccess.cs" />
     <Compile Include="DataAccess\Common\SQLCommon.cs" />
     <Compile Include="Entity\BillForExcel.cs" />

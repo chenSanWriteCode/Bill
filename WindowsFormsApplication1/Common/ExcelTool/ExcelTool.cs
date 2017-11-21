@@ -14,9 +14,30 @@ namespace bill.Common.ExcelTool
     /// <summary>
     /// 根据NPOI拓展的增删改查方法
     /// </summary>
-    public class ExcelTool 
+    public class ExcelTool
     {
         #region 增加 表头 一行数据 
+        /// <summary>
+        /// 根据类 创建表头
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="wb"></param>
+        /// <param name="style">表头单元格格式</param>
+        public static void createExcelColumns<T>(ref HSSFWorkbook wb, ICellStyle style)
+        {
+            ReflectEntityProp<T> reflectT = new ReflectEntityProp<T>();
+            createExcelColumns(ref wb, reflectT.table.name, reflectT.table.columns, style);
+        }
+        /// <summary>
+        /// 在sheet现有内容后，创建一行
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="sheet"></param>
+        /// <param name="t"></param>
+        public static void createRow<T>(ref ISheet sheet, T t)
+        {
+            createRow(ref sheet, entityToExcelRow<T>(t));
+        }
         /// <summary>
         /// 为workbook创建带表头的sheet
         /// </summary>
@@ -24,9 +45,9 @@ namespace bill.Common.ExcelTool
         /// <param name="tableName">sheet名</param>
         /// <param name="columns">表头</param>
         /// <param name="style">cellStyle can null</param>
-        public static void createExcelColumns(ref HSSFWorkbook wb, string tableName,string[] columns, ICellStyle style)
+        private static void createExcelColumns(ref HSSFWorkbook wb, string tableName, string[] columns, ICellStyle style)
         {
-            if (columns.Length>0)
+            if (columns.Length > 0)
             {
                 ISheet sheet = wb.CreateSheet(tableName);
                 sheet.CreateRow(0);
@@ -45,19 +66,19 @@ namespace bill.Common.ExcelTool
         /// </summary>
         /// <param name="sheet"></param>
         /// <param name="row"></param>
-        public static void createRow(ref HSSFSheet sheet,List<ExcelColumn> row)
+        private static void createRow(ref ISheet sheet, List<ExcelColumn> row)
         {
-            int lastRowNum = sheet.LastRowNum+1;
-            if (!isSheetEmpty(sheet) && row.Count>0)
+            int lastRowNum = sheet.LastRowNum + 1;
+            if (!isSheetEmpty(sheet) && row.Count > 0)
             {
                 sheet.CreateRow(lastRowNum);
-                for (int i = 0 ; i < row.Count; i++)
+                for (int i = 0; i < row.Count; i++)
                 {
-                    if (row[i].ColumnContent!=null && row[i].ColumnContent !="")
+                    if (row[i].ColumnContent != null && row[i].ColumnContent != "")
                     {
                         sheet.GetRow(lastRowNum).CreateCell(row[i].ColumnOrder, row[i].ExcelColumnType).SetCellValue(row[i].ColumnContent);
                     }
-                    
+
                 }
             }
         }
@@ -74,7 +95,7 @@ namespace bill.Common.ExcelTool
         {
             ISheet sheet = null;
             DataTable dt_sheet = null;
-            if (index< workbook.NumberOfSheets)
+            if (index < workbook.NumberOfSheets)
             {
                 sheet = workbook.GetSheetAt(index);
                 dt_sheet = excelToDataTable(sheet);
@@ -103,7 +124,7 @@ namespace bill.Common.ExcelTool
         /// <param name="index"></param>
         /// <param name="upRowIndex">是否上调行序号</param>
         /// <returns></returns>
-        public static bool deleteSheetRow(ref ISheet sheet, int index,bool upRowIndex)
+        public static bool deleteSheetRow(ref ISheet sheet, int index, bool upRowIndex)
         {
             bool flag = true;
             try
@@ -116,9 +137,9 @@ namespace bill.Common.ExcelTool
                 {
                     deleteSheetRow(ref sheet, index);
                 }
-                
+
             }
-            catch 
+            catch
             {
                 flag = false;
             }
@@ -151,11 +172,23 @@ namespace bill.Common.ExcelTool
         /// <summary>
         /// 修改sheet某一行
         /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="sheet"></param>
+        /// <param name="t"></param>
+        /// <param name="rowIndex"></param>
+        /// <returns></returns>
+        public static bool updateSheetRow<T>(ISheet sheet, T t, int rowIndex)
+        {
+            return updateSheetRow(sheet, entityToExcelRow<T>(t), rowIndex);
+        }
+        /// <summary>
+        /// 修改sheet某一行
+        /// </summary>
         /// <param name="sheet"></param>
         /// <param name="row"></param>
         /// <param name="rowIndex"></param>
         /// <returns></returns>
-        public static bool updateSheetRow(ISheet sheet, List<ExcelColumn> row,int rowIndex)
+        private static bool updateSheetRow(ISheet sheet, List<ExcelColumn> row, int rowIndex)
         {
             bool flag = true;
             try
@@ -171,12 +204,33 @@ namespace bill.Common.ExcelTool
                 MessageBox.Show(err.Message);
                 flag = false;
             }
-            
+
             return flag;
         }
 
         #endregion
 
+        /// <summary>
+        /// 将泛型数据转换为excel的row
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="t"></param>
+        /// <returns></returns>
+        private static List<ExcelColumn> entityToExcelRow<T>(T t)
+        {
+            ReflectEntityProp<T> reflectT = new ReflectEntityProp<T>();
+            List<Column> columnList = ReflectEntityProp<T>.reflectEntityValue(t, reflectT.table.columns);
+            List<ExcelColumn> row = new List<ExcelColumn>();
+            for (int i = 0; i < columnList.Count; i++)
+            {
+                ExcelColumn excelColumn = new ExcelColumn();
+                excelColumn.ColumnOrder = i;
+                excelColumn.ColumnContent = columnList[i].content;
+                excelColumn.ColumnType = columnList[i].type;
+                row.Add(excelColumn);
+            }
+            return row;
+        }
         /// <summary>
         /// 将sheet数据转换为datatable
         /// 以sheet第一行为表头，采集每列对应的数据(在表头基础上加一列excel_id，记录在excel中位置)，
@@ -192,14 +246,14 @@ namespace bill.Common.ExcelTool
                 dt_sheet = new DataTable();
                 //读取从firstrownum以下的数据
                 int firstRowNum = sheet.FirstRowNum;
-                
+
                 IRow headerRow = sheet.GetRow(firstRowNum);
                 IEnumerator rowEnumerate = sheet.GetRowEnumerator();
 
                 //key 第N个列，value 第N列对应的columnIndex
                 //Dictionary<int, int> dic = new Dictionary<int, int>();
                 int columnNum = 1;
-                int[] columnIndexs = new int[headerRow.Cells.Count+1];
+                int[] columnIndexs = new int[headerRow.Cells.Count + 1];
                 dt_sheet.Columns.Add("excel_id");
                 columnIndexs[0] = -1;
                 //字段名
@@ -209,7 +263,7 @@ namespace bill.Common.ExcelTool
                     columnIndexs[columnNum] = cell.ColumnIndex;
                     columnNum++;
                 }
-                while(rowEnumerate.MoveNext())
+                while (rowEnumerate.MoveNext())
                 {
                     IRow row = (IRow)rowEnumerate.Current;
                     //从第二行开始取数
@@ -217,7 +271,7 @@ namespace bill.Common.ExcelTool
                     //通过列序号获取  currentrow在某列的内容
                     //判断内容格式 给dr【i】 正确赋值
                     //dr为null  则删除
-                     if (row.RowNum>firstRowNum)
+                    if (row.RowNum > firstRowNum)
                     {
                         DataRow dr = dt_sheet.NewRow();
                         for (int i = 0; i < columnIndexs.Length; i++)
@@ -229,7 +283,7 @@ namespace bill.Common.ExcelTool
                                 {
                                     case CellType.Numeric:
                                         short format = cell.CellStyle.DataFormat;
-                                        if (format==14 || format==31 || format==57 || format==58)
+                                        if (format == 14 || format == 31 || format == 57 || format == 58)
                                         {
                                             dr[i] = cell.DateCellValue;
                                         }
@@ -274,13 +328,13 @@ namespace bill.Common.ExcelTool
         public static IWorkbook getWorkBook(string path)
         {
             IWorkbook workBook = null;
-            if (path!="")
+            if (path != "")
             {
                 workBook = WorkbookFactory.Create(path);
             }
             return workBook;
         }
-        
+
         /// <summary>
         /// 设置sheet第一行单元格格式
         /// </summary>
@@ -303,7 +357,7 @@ namespace bill.Common.ExcelTool
         /// <returns></returns>
         public static bool isSheetEmpty(ISheet sheet)
         {
-            if (sheet==null || sheet.PhysicalNumberOfRows<1)
+            if (sheet == null || sheet.PhysicalNumberOfRows < 1)
             {
                 return true;
             }

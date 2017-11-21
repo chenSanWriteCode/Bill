@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace bill.Common
+namespace bill.Common.ExcelTool
 {
     /// <summary>
     /// 反射entity，获取类名与属性名

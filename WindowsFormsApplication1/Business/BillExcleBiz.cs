@@ -103,13 +103,13 @@ namespace bill.Business
                 font.FontHeightInPoints = 12;
                 style.SetFont(font);
 
-                if (goodsReflect != null)
+                if (ExcelTool.getSheetDataAt(ExcelTool.getWorkBook(filePath + fileName), TableId.BillForExcel.ToString()) == null)
                 {
-                    ExcelTool.createExcelColumns(ref wb, goodsReflect.table.name, goodsReflect.table.columns, style);
+                    ExcelTool.createExcelColumns<BillForExcel>(ref wb, style);
                 }
-                if (goodsTypeReflect != null)
+                if (ExcelTool.getSheetDataAt(ExcelTool.getWorkBook(filePath + fileName), TableId.GoodsTypeForExcel.ToString()) == null)
                 {
-                    ExcelTool.createExcelColumns(ref wb, goodsTypeReflect.table.name, goodsTypeReflect.table.columns, style);
+                    ExcelTool.createExcelColumns<GoodsTypeForExcel>(ref wb, style);
                 }
                 FileStream fs = new FileStream(fileFullPath, FileMode.Create);
                 wb.Write(fs);

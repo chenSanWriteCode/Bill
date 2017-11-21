@@ -26,7 +26,7 @@ namespace Bill
             // 检查excle是否存在，不存在则创建
             if (ApplicationConfig.isUseSqlServer != "1")
             {
-                billBuzz = new BillExcleBiz();
+                billBuzz = new BillExcelBizNPOI();
                 billBuzz.init();
             }
             else
