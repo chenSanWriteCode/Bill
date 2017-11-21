@@ -60,6 +60,7 @@
             this.dtp_date_begin = new System.Windows.Forms.DateTimePicker();
             this.tb_goods_price_min = new System.Windows.Forms.TextBox();
             this.panel_condition_search = new System.Windows.Forms.Panel();
+            this.button1 = new System.Windows.Forms.Button();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.btn_search_insert = new System.Windows.Forms.Button();
             this.btn_insert = new System.Windows.Forms.Button();
@@ -95,7 +96,6 @@
             this.goods_type_code = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.goods_type_name = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.panel_condition_base = new System.Windows.Forms.Panel();
-            this.button1 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dgv_bill_search)).BeginInit();
             this.tabControl1.SuspendLayout();
             this.contextMenuStrip1.SuspendLayout();
@@ -417,6 +417,21 @@
             this.panel_condition_search.Name = "panel_condition_search";
             this.panel_condition_search.Size = new System.Drawing.Size(989, 78);
             this.panel_condition_search.TabIndex = 6;
+            // 
+            // button1
+            // 
+            this.button1.FlatAppearance.BorderColor = System.Drawing.Color.WhiteSmoke;
+            this.button1.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
+            this.button1.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
+            this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.button1.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.button1.Location = new System.Drawing.Point(708, 39);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(100, 30);
+            this.button1.TabIndex = 7;
+            this.button1.Text = "查询";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // tabPage2
             // 
@@ -781,20 +796,6 @@
             this.panel_condition_base.Name = "panel_condition_base";
             this.panel_condition_base.Size = new System.Drawing.Size(989, 45);
             this.panel_condition_base.TabIndex = 20;
-            // 
-            // button1
-            // 
-            this.button1.FlatAppearance.BorderColor = System.Drawing.Color.WhiteSmoke;
-            this.button1.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.button1.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-            this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.button1.Font = new System.Drawing.Font("微软雅黑", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.button1.Location = new System.Drawing.Point(708, 39);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(100, 30);
-            this.button1.TabIndex = 7;
-            this.button1.Text = "查询";
-            this.button1.UseVisualStyleBackColor = true;
             // 
             // Form1
             // 

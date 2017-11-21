@@ -11,6 +11,9 @@ using bill.Business;
 using bill.DataAccess.Common;
 using System.Reflection;
 using bill.Common;
+using bill.Common.ExcelTool;
+using NPOI.SS.UserModel;
+using System.IO;
 
 namespace Bill
 {
@@ -23,18 +26,18 @@ namespace Bill
             // 检查excle是否存在，不存在则创建
             if (ApplicationConfig.isUseSqlServer != "1")
             {
-                billBuzz = new BillExcelBizNPOI();
+                billBuzz = new BillExcleBiz();
                 billBuzz.init();
             }
             else
             {
                 billBuzz = new BillBiz();
             }
-            //initControl();
-            
-            
-            
-            
+            initControl();
+
+
+
+
         }
        
         /// <summary>
@@ -219,10 +222,10 @@ namespace Bill
             goods.goodsName = tb_goods_name_insert.Text;
             if(combo_goods_type_insert.SelectedIndex==-1)
             {
-                //MessageBox.Show("品类不能为空");
-                //return;
+                MessageBox.Show("品类不能为空");
+                return;
             }
-            //goods.goodsType = combo_goods_type_insert.SelectedValue.ToString();
+            goods.goodsType = combo_goods_type_insert.SelectedValue.ToString();
             goods.goodsMark = tb_goods_mark_insert.Text;
             double price;
             //判断价格值是否有效
@@ -460,6 +463,18 @@ namespace Bill
         }
         #endregion
 
+        private void button1_Click(object sender, EventArgs e)
+        {
+            string path = @"C:\123.xls";
+            IWorkbook workBook = ExcelTool.getWorkBook(path);
+            ExcelTool.getSheetDataAt(workBook, 0);
+            ISheet sheet = workBook.GetSheetAt(0);
+            ExcelTool.deleteSheetRow(ref sheet, 14);
+            Stream fs =new FileStream(path,FileMode.Open);
+            workBook.Write(fs);
+            fs.Close();
+
+        }
     }
 }
 
